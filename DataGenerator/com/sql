@@ -1,0 +1,135 @@
+
+create table sys.Orders
+( ORDER_ID int,
+ORDER_COUNTRY int,
+BRANCH_ID int,
+order_time datetime,
+primary key (ORDER_ID),
+foreign key (ORDER_COUNTRY) REFERENCES countries(COUNTRY_ID),
+foreign key (BRANCH_ID) REFERENCES branches(BRANCH_ID)
+)
+
+
+create table sys.Order_details (
+order_detail_id int NOT NULL AUTO_INCREMENT,
+ORDER_ID int,
+ITEM_ID int,
+QUANTITY int,
+DISCOUNT_ID int,
+INSERTION_TIME  datetime,
+primary key (order_detail_id),
+foreign key (ORDER_ID) REFERENCES Orders(ORDER_ID),
+foreign key (ITEM_ID) REFERENCES items(ITEM_ID),
+foreign key (DISCOUNT_ID) REFERENCES discounts(DISCOUNT_ID)
+)
+
+
+create table sys.branches
+(
+BRANCH_ID int ,
+BRANCH_NAME varchar(200),
+ACTIVE bool
+)
+
+
+create table sys.countries
+(
+COUNTRY_ID int ,
+COUNTRY_NAME varchar(200),
+primary key (COUNTRY_ID)
+)
+
+insert into sys.countries values
+(1,'USA'),
+(2,'PAK'),
+(3,'UK')
+
+
+create table sys.discounts
+(
+DISCOUNT_ID int,
+DISCOUNT_NAME varchar(200),
+DISCOUNT_PERCENTAGE decimal(9,2),
+primary key (DISCOUNT_ID)
+)
+
+
+insert into sys.discounts values
+(1,'disc1' ,10),
+(2,'dis2' , 20)
+
+
+
+
+create table sys.items (
+ITEM_ID int, 
+ITEM_NAME varchar(200),
+ITEM_PRICE decimal(9,2),
+ITEM_UOM varchar(200),
+primary key (ITEM_ID)
+)
+
+insert into  sys.items values 
+(1,'item1' , 10, 'kg'),
+(2,'item2' , 20, 'kg'),
+(3,'item3' , 14, 'kg'),
+(4,'item1' , 13, 'g')
+
+
+
+
+
+
+
+
+
+
+
+----------------------
+
+
+SELECT ORDER_COUNTRY
+	,order_details.ORDER_ID
+	,COUNTRY_NAME
+	,BRANCH_ID
+	,BRANCH_NAME
+	,BRANCH_ACTIVE
+	,order_detail_id
+	,ITEM_ID
+	,ITEM_NAME
+	,ITEM_PRICE
+	,ITEM_UOM
+	,QUANTITY
+	,DISCOUNT_ID
+	,DISCOUNT_NAME
+	,DISCOUNT_PERCENTAGE
+	,INSERTION_TIME
+	,order_time
+FROM (
+	SELECT order_details.order_detail_id
+		,order_details.ORDER_ID
+		,order_details.ITEM_ID
+		,items.ITEM_NAME
+		,items.ITEM_PRICE
+		,items.ITEM_UOM
+		,order_details.QUANTITY
+		,order_details.DISCOUNT_ID
+		,discounts.DISCOUNT_NAME
+		,discounts.DISCOUNT_PERCENTAGE
+		,order_details.INSERTION_TIME
+	FROM sys.order_details
+	LEFT JOIN sys.discounts ON discounts.DISCOUNT_ID = order_details.DISCOUNT_ID
+	LEFT JOIN sys.items ON items.ITEM_ID = order_details.ITEM_ID
+	) order_details
+LEFT JOIN (
+	SELECT Orders.ORDER_ID
+		,Orders.ORDER_COUNTRY
+		,countries.COUNTRY_NAME
+		,Orders.BRANCH_ID
+		,branches.BRANCH_NAME
+		,branches.ACTIVE BRANCH_ACTIVE
+		,Orders.order_time
+	FROM sys.Orders
+	LEFT JOIN sys.countries ON ORDER_COUNTRY = COUNTRY_ID
+	LEFT JOIN sys.branches ON branches.BRANCH_ID = Orders.BRANCH_ID
+	) orders ON orders.ORDER_ID = order_details.ORDER_ID

@@ -1,0 +1,64 @@
+create table sys.Orders
+( ORDER_ID int,
+ORDER_COUNTRY int,
+BRANCH_ID int,
+order_time datetime
+)
+
+
+create table sys.Order_details (
+order_detail_id int NOT NULL AUTO_INCREMENT,
+ORDER_ID int,
+ITEM_ID int,
+QUANTITY int,
+DISCOUNT_ID int,
+INSERTION_TIME  datetime,
+primary key (order_detail_id)
+)
+
+
+create table sys.branches
+(
+BRANCH_ID int ,
+BRANCH_NAME varchar(200),
+ACTIVE bool
+)
+
+
+create table sys.countries
+(
+COUNTRY_ID int ,
+COUNTRY_NAME varchar(200)
+)
+
+insert into sys.countries values
+(1,'USA'),
+(2,'PAK'),
+(3,'UK')
+
+
+create table sys.discounts
+(
+DISCOUNT_ID int,
+DISCOUNT_NAME varchar(200),
+DISCOUNT_PERCENTAGE decimal(9,2)
+)
+
+
+insert into sys.discounts values
+(1,'disc1' ,10),
+(2,'dis2' , 20)
+
+
+create table sys.items (
+ITEM_ID int,
+ITEM_NAME varchar(200),
+ITEM_PRICE decimal(9,2),
+ITEM_UOM varchar(200)
+)
+
+insert into  sys.items values
+(1,'item1' , 10, 'kg'),
+(2,'item2' , 20, 'kg'),
+(3,'item3' , 14, 'kg'),
+(4,'item1' , 13, 'kg')

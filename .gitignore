@@ -1,0 +1,10 @@
+**/venv
+venv
+**/.env
+.env
+DataTransformer/DataTransformer/target
+./DataTransformer/DataTransformer/target
+**/DataTransformer/DataTransformer/target
+DataMigrator/workshop_env
+**/DataMigrator/workshop_env
+./DataMigrator/workshop_env
