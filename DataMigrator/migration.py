@@ -11,6 +11,7 @@ if __name__ == '__main__':
 		flat_data = pd.read_sql(queries.query, engine.connect())
 		flat_data.to_csv("sample.csv")
 		flat_data.to_parquet('df.parquet',compression='gzip')
+		print("data migrated from database to file formate")
 
 
 	except Exception as ex:
@@ -20,5 +21,6 @@ if __name__ == '__main__':
 	try:
 		engine = get_connection()
 		orders = pd.read_sql("select * from sys.orders", engine.connect())
+		
 	except Exception as ex:
 		print("Connection error: \n", ex)
